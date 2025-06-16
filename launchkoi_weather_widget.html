@@ -1,0 +1,62 @@
+<!-- 🌦️ LaunchKoi Multi-Route Live Weather Widget -->
+<div style="padding: 20px; background: #f1f1f1; border-radius: 10px;">
+  <h2 style="text-align: center; color: #333;">🌤️ নৌ রুট অনুযায়ী লাইভ আবহাওয়া আপডেট</h2>
+
+  <!-- Dhaka ⇄ Chandpur -->
+  <div style="margin-bottom: 20px;">
+    <h3>ঢাকা ⇄ চাঁদপুর</h3>
+    <p id="weather-dhaka">ঢাকা: তথ্য লোড হচ্ছে...</p>
+    <p id="weather-chandpur">চাঁদপুর: তথ্য লোড হচ্ছে...</p>
+  </div>
+
+  <!-- Dhaka ⇄ Barisal -->
+  <div style="margin-bottom: 20px;">
+    <h3>ঢাকা ⇄ বরিশাল</h3>
+    <p id="weather-barisal">বরিশাল: তথ্য লোড হচ্ছে...</p>
+  </div>
+
+  <!-- Dhaka ⇄ Bhola -->
+  <div style="margin-bottom: 20px;">
+    <h3>ঢাকা ⇄ ভোলা</h3>
+    <p id="weather-bhola">ভোলা: তথ্য লোড হচ্ছে...</p>
+  </div>
+
+  <!-- Chandpur ⇄ Haimchar -->
+  <div style="margin-bottom: 20px;">
+    <h3>চাঁদপুর ⇄ হাইমচর</h3>
+    <p id="weather-haimchar">হাইমচর: তথ্য লোড হচ্ছে...</p>
+  </div>
+
+  <!-- Dhaka ⇄ Shariatpur -->
+  <div style="margin-bottom: 20px;">
+    <h3>ঢাকা ⇄ শরীয়তপুর</h3>
+    <p id="weather-shariatpur">শরীয়তপুর: তথ্য লোড হচ্ছে...</p>
+  </div>
+</div>
+
+<script>
+  const apiKey = 'YOUR_API_KEY'; // 🔁 এখানে OpenWeatherMap-এর API key বসাও
+  const cities = [
+    { id: 'weather-dhaka', name: 'Dhaka' },
+    { id: 'weather-chandpur', name: 'Chandpur' },
+    { id: 'weather-barisal', name: 'Barisal' },
+    { id: 'weather-bhola', name: 'Bhola' },
+    { id: 'weather-haimchar', name: 'Haimchar' },
+    { id: 'weather-shariatpur', name: 'Shariatpur' }
+  ];
+
+  cities.forEach(city => {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city.name}&units=metric&lang=bn&appid=${apiKey}`)
+      .then(res => res.json())
+      .then(data => {
+        const temp = data.main.temp;
+        const desc = data.weather[0].description;
+        const icon = data.weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+        document.getElementById(city.id).innerHTML = `<img src="${iconUrl}" style="vertical-align: middle; width: 40px; height: 40px;" /> ${city.name}: ${temp}°C – ${desc}`;
+      })
+      .catch(() => {
+        document.getElementById(city.id).innerText = `${city.name}: তথ্য পাওয়া যায়নি`;
+      });
+  });
+</script>
